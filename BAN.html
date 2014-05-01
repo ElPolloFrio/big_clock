@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script> -->
+    <script type="text/javascript" src="d3.v2.js"></script>
+    
+    <style>
+	.digits {
+		font: bold 200px monospace;
+	}
+	
+	.tz {
+		font: bold 70px monospace;
+	}
+	
+	/* #FFFFFF (white), #00FF00 (lime green), #5DFC0A (LED green), #CD0000 (red3), #FF0000 (red), #007FFF (slateblue)*/
+	
+	#local {
+		color: #5DFC0A;
+	}
+	
+	#utc {
+		color: #FFFFFF;
+	}
+	
+	body {
+		background-color: #000000;
+		color: #FFFFFF;
+	}
+
+	
+    </style>
+    
+</head>
+<body>
+	<!-- display local and UTC clocks with big & accessible numbers (BAN)-->
+	<div id="local">
+		<div class="tz"></div>
+		<div class="digits"></div>
+	</div>
+	<br><br>
+	<div id="utc">
+		<div class="tz"></div>
+		<div class="digits"></div>
+	</div>
+	<script type="text/javascript">
+	
+		hms = function() {
+			var currTime = new Date();
+			var localTime = currTime.toString();
+			var UTCTime = currTime.toUTCString();
+			// The format is as follows: 
+			//Sat Oct 12 2013 17:34:27 GMT-0500 (Central Standard Time) 
+			//Sat, 12 Oct 2013 22:34:43 GMT 
+			
+			return data = [localTime, UTCTime];
+		};
+
+		digitalClock = function(hmsdata) {
+			// clear old values before displaying new ones
+			d3.selectAll('text').remove();
+
+			var arrClass = ['tz', 'digits'];
+			
+			var tzLabels = d3.selectAll('.tz')
+							.data([hmsdata[0].split(' ')[5], hmsdata[1].split(' ')[5]])
+							.append('text')
+						        .attr('class', 'tz')
+						        .text(function(d, i) {return d;});
+			
+			var clocks = d3.selectAll('.digits')
+							.data([hmsdata[0].split(' ')[4], hmsdata[1].split(' ')[4]])
+							.append('text')
+							.attr('class', 'digits')
+							.text(function(d, i) {return d;});
+
+		};
+		
+		setInterval(function() {
+			var data = hms();
+			digitalClock(data);
+		}, 1000); //1000 ms = 1 second
+		
+	</script>
+
+</body>
+</html>
